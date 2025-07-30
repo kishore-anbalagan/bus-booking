@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bus Booking System</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #3a86ff;
+      --secondary-color: #ff5722;
+      --accent-color: #4cc9f0;
+      --dark-color: #192841;
+      --light-color: #f8f9fa;
+      --success-color: #38b000;
+      --text-color: #333;
+      --light-text: #f8f9fa;
+      --shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      --hover-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      transition: all 0.3s ease;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      color: var(--text-color);
+      line-height: 1.6;
+      scroll-behavior: smooth;
+      overflow-x: hidden;
+    }
+    
+    header {
+      background: linear-gradient(to right, var(--dark-color), #2d4263);
+      color: var(--light-text);
+      padding: 1.2rem 5%;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: var(--shadow);
+    }
+    
+    .logo {
+      display: flex;
+      align-items: center;
+    }
+    
+    .logo i {
+      margin-right: 10px;
+      font-size: 1.5rem;
+      color: var(--accent-color);
+    }
+    
+    header h1 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin: 0;
+    }
+    
+    nav {
+      display: flex;
+      gap: 15px;
+    }
+    
+    nav a {
+      color: var(--light-text);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      padding: 0.5rem 1rem;
+      border-radius: 50px;
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: all 0.3s;
+    }
+    
+    nav a:hover {
+      background: var(--secondary-color);
+      border-color: var(--secondary-color);
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(255, 87, 34, 0.4);
+    }
+    
+    .hero-section {
+      height: 60vh;
+      background: linear-gradient(rgba(25, 40, 65, 0.7), rgba(25, 40, 65, 0.7)), url(smt.jpg);
+      background-size: cover;
+      background-position: center;
+      color: var(--light-text);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .hero-section h2 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      animation: fadeInDown 1s ease;
+    }
+    
+    .hero-section p {
+      font-size: 1.2rem;
+      max-width: 700px;
+      margin-bottom: 2rem;
+      animation: fadeInUp 1s ease;
+    }
+    
+    .hero-btn {
+      background: var(--secondary-color);
+      color: white;
+      padding: 0.8rem 2rem;
+      border: none;
+      border-radius: 50px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      box-shadow: 0 5px 15px rgba(255, 87, 34, 0.4);
+      animation: fadeInUp 1.2s ease;
+    }
+    
+    .hero-btn:hover {
+      background: #e64a19;
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(255, 87, 34, 0.5);
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: -50px auto 50px;
+      padding: 0 20px;
+    }
+    
+    .features-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 30px;
+      margin-bottom: 50px;
+    }
+    
+    .feature-card {
+      background: white;
+      border-radius: 10px;
+      padding: 30px;
+      text-align: center;
+      box-shadow: var(--shadow);
+    }
+    
+    .feature-card:hover {
+      transform: translateY(-10px);
+      box-shadow: var(--hover-shadow);
+    }
+    
+    .feature-card i {
+      font-size: 2.5rem;
+      color: var(--primary-color);
+      margin-bottom: 20px;
+    }
+    
+    .feature-card h3 {
+      margin-bottom: 15px;
+      color: var(--dark-color);
+    }
+    
+    .section {
+      background: white;
+      padding: 50px;
+      border-radius: 15px;
+      margin-bottom: 50px;
+      box-shadow: var(--shadow);
+    }
+    
+    .section h2 {
+      font-size: 2rem;
+      color: var(--dark-color);
+      text-align: center;
+      margin-bottom: 30px;
+      position: relative;
+      padding-bottom: 15px;
+    }
+    
+    .section h2::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 4px;
+      background: var(--secondary-color);
+      border-radius: 2px;
+    }
+    
+    .bus-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 25px;
+    }
+    
+    .bus-card {
+      background: linear-gradient(to bottom right, #fdfdfd, #f9f9f9);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      transition: all 0.3s;
+    }
+    
+    .bus-card:hover {
+      transform: translateY(-8px);
+      box-shadow: var(--hover-shadow);
+    }
+    
+    .bus-card-header {
+      background: var(--primary-color);
+      color: white;
+      padding: 15px 20px;
+    }
+    
+    .bus-card-body {
+      padding: 20px;
+    }
+    
+    .bus-detail {
+      display: flex;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    
+    .bus-detail i {
+      color: var(--primary-color);
+      margin-right: 10px;
+      width: 20px;
+    }
+    
+    .book-btn {
+      background: var(--success-color);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 50px;
+      margin-top: 15px;
+      cursor: pointer;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+    }
+    
+    .book-btn:hover {
+      background: #2d9700;
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(56, 176, 0, 0.3);
+    }
+    
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+    
+    .gallery-item {
+      position: relative;
+      border-radius: 10px;
+      overflow: hidden;
+      height: 200px;
+    }
+    
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s;
+    }
+    
+    .gallery-item:hover img {
+      transform: scale(1.1);
+    }
+    
+    .gallery-item::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 60%);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    
+    .gallery-item:hover::after {
+      opacity: 1;
+    }
+    
+    .testimonials {
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+    }
+    
+    .testimonial {
+      background: linear-gradient(to right bottom, #ffffff, #f5f7fa);
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: var(--shadow);
+      position: relative;
+    }
+    
+    .testimonial::before {
+      content: '\201C';
+      font-family: Arial, sans-serif;
+      position: absolute;
+      top: 10px;
+      left: 20px;
+      font-size: 5rem;
+      color: rgba(58, 134, 255, 0.1);
+      line-height: 1;
+    }
+    
+    .testimonial-content {
+      position: relative;
+      z-index: 1;
+      font-style: italic;
+      margin-bottom: 20px;
+    }
+    
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    
+    .testimonial-author-img {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: #ddd;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .testimonial-author-img i {
+      font-size: 1.5rem;
+      color: #aaa;
+    }
+    
+    .testimonial-author-info h4 {
+      margin: 0;
+      color: var(--dark-color);
+    }
+    
+    .testimonial-author-info p {
+      margin: 0;
+      font-size: 0.9rem;
+      color: #777;
+    }
+    
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 30px;
+    }
+    
+    .contact-card {
+      background: white;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: var(--shadow);
+      text-align: center;
+    }
+    
+    .contact-card i {
+      font-size: 2rem;
+      color: var(--primary-color);
+      margin-bottom: 15px;
+    }
+    
+    .contact-card h3 {
+      margin-bottom: 10px;
+      color: var(--dark-color);
+    }
+    
+    .contact-form {
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: var(--shadow);
+      margin-top: 30px;
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--dark-color);
+      font-weight: 500;
+    }
+    
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 1rem;
+    }
+    
+    .form-group input:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(58, 134, 255, 0.1);
+    }
+    
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+    }
+    
+    .submit-btn {
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 12px 25px;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      display: inline-block;
+    }
+    
+    .submit-btn:hover {
+      background: #2a75e6;
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(58, 134, 255, 0.3);
+    }
+    
+    footer {
+      background: var(--dark-color);
+      color: #ccc;
+      padding: 50px 0 20px;
+    }
+    
+    .footer-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 40px;
+    }
+    
+    .footer-section h3 {
+      color: white;
+      margin-bottom: 20px;
+      position: relative;
+      padding-bottom: 10px;
+    }
+    
+    .footer-section h3::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 50px;
+      height: 2px;
+      background: var(--secondary-color);
+    }
+    
+    .footer-section ul {
+      list-style: none;
+    }
+    
+    .footer-section ul li {
+      margin-bottom: 10px;
+    }
+    
+    .footer-section ul li a {
+      color: #aaa;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    
+    .footer-section ul li a:hover {
+      color: var(--secondary-color);
+      padding-left: 5px;
+    }
+    
+    .social-links {
+      display: flex;
+      gap: 15px;
+      margin-top: 20px;
+    }
+    
+    .social-links a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      border-radius: 50%;
+      transition: all 0.3s;
+    }
+    
+    .social-links a:hover {
+      background: var(--secondary-color);
+      transform: translateY(-5px);
+    }
+    
+    .copyright {
+      text-align: center;
+      padding-top: 30px;
+      margin-top: 30px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      font-size: 0.9rem;
+    }
+    
+    @keyframes fadeInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .hero-benefits {
+      list-style: none;
+      margin: 1rem 0 2rem 0;
+      padding: 0;
+      display: flex;
+      gap: 1.5rem;
+      justify-content: center;
+      color: var(--light-text);
+      font-size: 1.1rem;
+    }
+    .hero-benefits li {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .scroll-down {
+      margin-top: 2rem;
+      color: var(--light-text);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-size: 1.2rem;
+      opacity: 0.8;
+      animation: bounce 2s infinite;
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0);}
+      50% { transform: translateY(10px);}
+    }
+    
+    @media (max-width: 768px) {
+      header {
+        flex-direction: column;
+        padding: 15px;
+      }
+      
+      nav {
+        margin-top: 15px;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      
+      .section {
+        padding: 30px 20px;
+      }
+      
+      .hero-section {
+        height: auto;
+        padding: 50px 20px;
+      }
+      
+      .hero-section h2 {
+        font-size: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <i class="fas fa-bus"></i>
+    <h1>TravelEase</h1>
+  </div>
+  <nav>
+    <a href="index.html"><i class="fas fa-home"></i> Home</a>
+    <a href="signin.html"><i class="fas fa-sign-in-alt"></i> Sign In</a>
+    <a href="signup.html"><i class="fas fa-user-plus"></i> Sign Up</a>
+    <a href="#gallery"><i class="fas fa-images"></i> Gallery</a>
+    <a href="#contact"><i class="fas fa-envelope"></i> Contact</a>
+  </nav>
+</header>
+
+<section class="hero-section">
+  <video class="hero-bg-video" src="royal-video.mp4" autoplay loop muted playsinline></video>
+  <h2>Your Journey, Your Comfort</h2>
+  <p>
+    Experience hassle-free travel with our premium bus services.<br>
+    <strong>Book your tickets in minutes and travel with confidence.</strong>
+  </p>
+  <ul class="hero-benefits">
+    <li><i class="fas fa-check-circle"></i> Instant ticket confirmation</li>
+    <li><i class="fas fa-check-circle"></i> No hidden fees</li>
+    <li><i class="fas fa-check-circle"></i> 24/7 customer support</li>
+  </ul>
+  <button class="hero-btn" type="button" onclick="window.location.href='#bus-list'">
+    Book Your Trip Now
+  </button>
+  <div class="scroll-down">
+    <i class="fas fa-angle-double-down"></i>
+    <span>See available buses below</span>
+  </div>
+</section>
+<br>
+<div class="container">
+  <!-- Features Section -->
+  <div class="features-cards" data-aos="fade-up">
+    <div class="feature-card">
+      <i class="fas fa-money-bill-wave"></i>
+      <h3>Best Prices</h3>
+      <p>Enjoy competitive rates and exclusive discounts on all routes.</p>
+    </div>
+    <div class="feature-card">
+      <i class="fas fa-couch"></i>
+      <h3>Premium Comfort</h3>
+      <p>Experience luxury with our spacious, comfortable seating arrangements.</p>
+    </div>
+    <div class="feature-card">
+      <i class="fas fa-mobile-alt"></i>
+      <h3>Easy Booking</h3>
+      <p>Book your tickets anytime, anywhere with our user-friendly platform.</p>
+    </div>
+    <div class="feature-card">
+      <i class="fas fa-clock"></i>
+      <h3>On-Time Service</h3>
+      <p>Punctuality is our priority. We value your time as much as you do.</p>
+    </div>
+  </div>
+
+  <!-- Available Buses Section -->
+  <section class="section" data-aos="fade-up">
+    <h2>Available Buses</h2>
+    <div class="bus-list" id="bus-list"></div>
+  </section>
+
+  <!-- Gallery Section -->
+  <section class="section" id="gallery" data-aos="fade-up">
+    <h2>Our Fleet Gallery</h2>
+    <div class="gallery">
+      <div class="gallery-item">
+        <img src="IMG-20250427-WA0001.jpg" alt="Luxury Bus Interior">
+      </div>
+      <div class="gallery-item">
+        <img src="IMG-20250427-WA0004.jpg" alt="Modern Bus Exterior">
+      </div>
+      <div class="gallery-item">
+        <img src="IMG-20250427-WA0002.jpg" alt="Comfortable Seating">
+      </div>
+      <div class="gallery-item">
+        <img src="IMG-20250427-WA0003.jpg" alt="Bus Amenities">
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials Section -->
+  <section class="section" data-aos="fade-up">
+    <h2>What Our Customers Say</h2>
+    <div class="testimonials">
+      <div class="testimonial">
+        <p class="testimonial-content">Booking a bus has never been this easy and reliable. Their punctuality and comfort are unmatched. Highly recommended service!</p>
+        <div class="testimonial-author">
+          <div class="testimonial-author-img">
+            <i class="fas fa-user"></i>
+          </div>
+          <div class="testimonial-author-info">
+            <h4>Kishore</h4>
+            <p>Regular Traveler</p>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial">
+        <p class="testimonial-content">The online booking system is intuitive, and the bus condition was excellent. Staff was courteous and helpful throughout the journey.</p>
+        <div class="testimonial-author">
+          <div class="testimonial-author-img">
+            <i class="fas fa-user"></i>
+          </div>
+          <div class="testimonial-author-info">
+            <h4>surendhar </h4>
+            <p>Business Traveler</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section class="section" id="contact" data-aos="fade-up">
+    <h2>Get In Touch</h2>
+    <div class="contact-grid">
+      <div class="contact-card">
+        <i class="fas fa-phone-alt"></i>
+        <h3>Call Us</h3>
+        <p>+91 9876543210</p>
+        <p>Mon-Sat: 8:00 AM - 8:00 PM</p>
+      </div>
+      <div class="contact-card">
+        <i class="fas fa-envelope"></i>
+        <h3>Email Us</h3>
+        <p>travelease@busbooking.com</p>
+        <p>We respond within 24 hours</p>
+      </div>
+      <div class="contact-card">
+        <i class="fas fa-map-marker-alt"></i>
+        <h3>Visit Us</h3>
+        <p>123, Main Street, salem</p>
+        <p>Country - 600001</p>
+      </div>
+    </div>
+    
+    <div class="contact-form">
+      <h3>Send Us a Message</h3>
+      <form id="contact-form">
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="name">Your Name</label>
+            <input type="text" id="name" placeholder="Enter your name">
+          </div>
+          <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" placeholder="Enter your email">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="subject">Subject</label>
+          <input type="text" id="subject" placeholder="Enter subject">
+        </div>
+        <div class="form-group">
+          <label for="message">Message</label>
+          <textarea id="message" rows="5" placeholder="Enter your message"></textarea>
+        </div>
+        <button type="submit" class="submit-btn">Send Message</button>
+      </form>
+    </div>
+  </section>
+</div>
+
+<footer>
+  <div class="footer-container">
+    <div class="footer-section">
+      <h3>TravelEase </h3>
+      <p>Your reliable partner for comfortable and affordable bus travel across the country.</p>
+      <div class="social-links">
+        <a href="https://www.facebook.com/"><i class="fab fa-facebook-f"></i></a>
+        <a href="https://www.twitter.com/"><i class="fab fa-twitter"></i></a>
+        <a href="https://www.instagram.com/"><i class="fab fa-instagram"></i></a>
+        <a href="https://www.linkedin.com/"><i class="fab fa-linkedin-in"></i></a>
+      </div>
+    </div>
+    <div class="footer-section">
+      <h3>Quick Links</h3>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="services.html">Services</a></li>
+        <li><a href="routes.html">Routes</a></li>
+        <li><a href="contact.html">Contact Us</a></li>
+      </ul>
+    </div>
+    <div class="footer-section">
+      <h3>Support</h3>
+      <ul>
+        <li>FAQs</a></li>
+        <li>Terms & Conditions</a></li>
+        <li>Privacy Policy</a></li>
+        <li>Cancellation & Refund</a></li>
+        <li>Help & Support</a></li>
+      </ul>
+    </div>
+    <div class="footer-section">
+      <h3>Newsletter</h3>
+      <p>Subscribe to get updates on new routes and exclusive offers.</p>
+      
+    </div>
+  </div>
+  <div class="copyright">
+    <p>© 2025 TravelEase Bus Booking System | All Rights Reserved</p>
+  </div>
+</footer>
+
+<script>
+  AOS.init({
+    duration: 800,
+    easing: 'ease-in-out',
+    once: true
+  });
+
+  const buses = [
+    { name: "SMT TRAVELS", departure: "10:00 AM", arrival: "2:00 PM", fare: "₹500", type: "AC Sleeper" },
+    { name: "VETTAIYAN", departure: "6:00 AM", arrival: "12:00 PM", fare: "₹550", type: "Non-AC Seater" },
+    { name: "KONGU RAJA", departure: "7:00 AM", arrival: "10:00 AM", fare: "₹300", type: "AC Semi-Sleeper" },
+    { name: "VINAYAGA TRAVELS", departure: "6:00 AM", arrival: "11:00 AM", fare: "₹200", type: "Non-AC Sleeper" },
+    { name: "SRI MURUGAN", departure: "8:00 AM", arrival: "10:30 AM", fare: "₹200", type: "AC Luxury" },
+    { name: "MATHI", departure: "7:00 AM", arrival: "1:00 PM", fare: "₹700", type: "AC Volvo" }
+  ];
+
+  const busList = document.getElementById('bus-list');
+
+  buses.forEach(bus => {
+    const busCard = document.createElement('div');
+    busCard.className = 'bus-card';
+    busCard.innerHTML = `
+      <div class="bus-card-header">
+        <h3>${bus.name}</h3>
+        <small>${bus.type}</small>
+      </div>
+      <div class="bus-card-body">
+        <div class="bus-detail">
+          <i class="fas fa-clock"></i>
+          <p><strong>Departure:</strong> ${bus.departure}</p>
+        </div>
+        <div class="bus-detail">
+          <i class="fas fa-flag-checkered"></i>
+          <p><strong>Arrival:</strong> ${bus.arrival}</p>
+        </div>
+        <div class="bus-detail">
+          <i class="fas fa-tag"></i>
+          <p><strong>Fare:</strong> ${bus.fare}</p>
+        </div>
+        <button class="book-btn" onclick="confirmBooking('${bus.name}')">
+          <i class="fas fa-ticket-alt"></i> Book Now
+        </button>
+      </div>
+    `;
+    busList.appendChild(busCard);
+  });
+
+  async function confirmBooking(busName) {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      alert('Please log in to book a seat.');
+      window.location.href = 'signin.html';
+      return;
+    }
+
+    const email = prompt('Enter your email to confirm booking:');
+    const seatNumber = prompt('Enter your seat number:');
+    const date = prompt('Enter the travel date (YYYY-MM-DD):');
+
+    try {
+      const response = await fetch('http://localhost:5000/api/book-seat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ email, busName, seatNumber, date }),
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        alert(data.message);
+      } else {
+        alert(data.error || 'Booking failed');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('An error occurred while booking the seat.');
+    }
+  }
+
+  // Form submission handling
+  document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('contact-form').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+      const message = document.getElementById('message').value;
+
+      if (!message.trim()) {
+        alert('Please enter a message.');
+        return;
+      }
+
+      const response = await fetch('/api/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, message })
+      });
+
+      if (response.ok) {
+        alert('Thank you for your message! We will get back to you soon.');
+        document.getElementById('contact-form').reset();
+      } else {
+        alert('There was an error sending your message.');
+      }
+    });
+  });
+</script>
+
+</body>
+</html>

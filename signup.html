@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up - TravelEase Bus Booking</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #3a86ff;
+      --secondary-color: #ff5722;
+      --accent-color: #4cc9f0;
+      --dark-color: #192841;
+      --light-color: #f8f9fa;
+      --success-color: #38b000;
+      --text-color: #333;
+      --light-text: #f8f9fa;
+      --shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      --hover-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      transition: all 0.3s ease;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      color: var(--text-color);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    header {
+      background: linear-gradient(to right, var(--dark-color), #2d4263);
+      color: var(--light-text);
+      padding: 1.2rem 5%;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: var(--shadow);
+    }
+    
+    .logo {
+      display: flex;
+      align-items: center;
+    }
+    
+    .logo i {
+      margin-right: 10px;
+      font-size: 1.5rem;
+      color: var(--accent-color);
+    }
+    
+    header h1 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin: 0;
+    }
+    
+    nav {
+      display: flex;
+      gap: 15px;
+    }
+    
+    nav a {
+      color: var(--light-text);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      padding: 0.5rem 1rem;
+      border-radius: 50px;
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: all 0.3s;
+    }
+    
+    nav a:hover {
+      background: var(--secondary-color);
+      border-color: var(--secondary-color);
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(255, 87, 34, 0.4);
+    }
+    
+    .main-container {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 40px 20px;
+    }
+    
+    .signup-container {
+      background: white;
+      border-radius: 15px;
+      box-shadow: var(--hover-shadow);
+      overflow: hidden;
+      width: 100%;
+      max-width: 900px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+    
+    .signup-image {
+      background: linear-gradient(rgba(25, 40, 65, 0.7), rgba(25, 40, 65, 0.7)), url("/api/placeholder/600/900");
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 40px;
+      color: white;
+    }
+    
+    .signup-image h2 {
+      font-size: 2rem;
+      margin-bottom: 20px;
+    }
+    
+    .signup-image p {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    
+    .benefits {
+      list-style: none;
+      margin-bottom: 30px;
+    }
+    
+    .benefits li {
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+    }
+    
+    .benefits li i {
+      margin-right: 10px;
+      color: var(--secondary-color);
+    }
+    
+    .signup-form {
+      padding: 40px;
+    }
+    
+    .signup-form h2 {
+      color: var(--dark-color);
+      margin-bottom: 30px;
+      position: relative;
+      padding-bottom: 10px;
+    }
+    
+    .signup-form h2::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 60px;
+      height: 3px;
+      background: var(--secondary-color);
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+    
+    .form-group input {
+      width: 100%;
+      padding: 12px 15px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+    
+    .form-group input:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(58, 134, 255, 0.1);
+    }
+    
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+    
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .checkbox-group input {
+      margin-right: 10px;
+    }
+    
+    .signup-btn {
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 12px 25px;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .signup-btn:hover {
+      background: #2a75e6;
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(58, 134, 255, 0.3);
+    }
+    
+    .alternate-signin {
+      margin-top: 30px;
+      text-align: center;
+    }
+    
+    .alternate-signin p {
+      margin-bottom: 15px;
+      color: #666;
+    }
+    
+    .social-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+    }
+    
+    .social-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #f1f1f1;
+      color: #333;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .social-btn:hover {
+      transform: translateY(-3px);
+    }
+    
+    .social-btn.facebook {
+      background: #3b5998;
+      color: white;
+    }
+    
+    .social-btn.google {
+      background: #dd4b39;
+      color: white;
+    }
+    
+    .login-link {
+      text-align: center;
+      margin-top: 20px;
+    }
+    
+    .login-link a {
+      color: var(--primary-color);
+      text-decoration: none;
+      font-weight: 500;
+    }
+    
+    .login-link a:hover {
+      text-decoration: underline;
+    }
+    
+    footer {
+      background: var(--dark-color);
+      color: #ccc;
+      text-align: center;
+      padding: 20px;
+      margin-top: auto;
+    }
+    
+    footer p {
+      margin: 0;
+      font-size: 0.9rem;
+    }
+    
+    footer a {
+      color: var(--secondary-color);
+      text-decoration: none;
+    }
+    
+    footer a:hover {
+      text-decoration: underline;
+    }
+    
+    @media (max-width: 768px) {
+      header {
+        flex-direction: column;
+        padding: 15px;
+      }
+      
+      nav {
+        margin-top: 15px;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      
+      .signup-container {
+        grid-template-columns: 1fr;
+      }
+      
+      .signup-image {
+        display: none;
+      }
+      
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <i class="fas fa-bus"></i>
+    <h1>TravelEase Bus Booking</h1>
+  </div>
+  <nav>
+    <a href="index.html"><i class="fas fa-home"></i> Home</a>
+    <a href="signin.html"><i class="fas fa-sign-in-alt"></i> Sign In</a>
+    <a href="#"><i class="fas fa-info-circle"></i> About</a>
+    <a href="#"><i class="fas fa-phone"></i> Contact</a>
+  </nav>
+</header>
+
+<div class="main-container">
+  <div class="signup-container" data-aos="fade-up">
+    <div class="signup-image">
+      <h2>Join TravelEase</h2>
+      <p>Create an account and start enjoying seamless bus travel experiences across the country.</p>
+      
+      <ul class="benefits">
+        <li><i class="fas fa-check-circle"></i> Quick & easy booking process</li>
+        <li><i class="fas fa-check-circle"></i> Exclusive member discounts</li>
+        <li><i class="fas fa-check-circle"></i> Priority customer support</li>
+        <li><i class="fas fa-check-circle"></i> Easy tracking of your bookings</li>
+        <li><i class="fas fa-check-circle"></i> Travel history and preferences</li>
+      </ul>
+    </div>
+    
+    <div class="signup-form">
+      <h2>Create Account</h2>
+      <form id="signup-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="first-name">First Name</label>
+            <input type="text" id="first-name" required>
+          </div>
+          <div class="form-group">
+            <label for="last-name">Last Name</label>
+            <input type="text" id="last-name" required>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="phone">Phone Number</label>
+          <input type="tel" id="phone" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="confirm-password">Confirm Password</label>
+          <input type="password" id="confirm-password" required>
+        </div>
+        
+        <div class="checkbox-group">
+          <input type="checkbox" id="terms" required>
+          <label for="terms">I agree to the <a href="#">Terms & Conditions</a> and <a href="#">Privacy Policy</a></label>
+        </div>
+        
+        <button type="submit" class="signup-btn">
+          <i class="fas fa-user-plus"></i> Create Account
+        </button>
+      </form>
+      
+      <div class="alternate-signin">
+        <p>Or sign up with</p>
+        <div class="social-buttons">
+          <button class="social-btn facebook">
+            <i class="fab fa-facebook-f"></i>
+          </button>
+          <button class="social-btn google">
+            <i class="fab fa-google"></i>
+          </button>
+        </div>
+      </div>
+      
+      <div class="login-link">
+        <p>Already have an account? <a href="signin.html">Sign In</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p>© 2025 TravelEase Bus Booking System | <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+</footer>
+
+<script>
+  AOS.init({
+    duration: 800,
+    easing: 'ease-in-out',
+    once: true
+  });
+  
+  document.getElementById('signup-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const password = document.getElementById('password').value;
+    const confirmPassword = document.getElementById('confirm-password').value;
+    
+    if (password !== confirmPassword) {
+      alert('Passwords do not match!');
+      return;
+    }
+    
+    alert('Account created successfully! Please sign in to continue.');
+    window.location.href = 'signin.html';
+  });
+</script>
+
+</body>
+</html>
