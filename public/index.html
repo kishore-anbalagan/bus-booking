@@ -91,9 +91,34 @@
       box-shadow: 0 5px 15px rgba(255, 87, 34, 0.4);
     }
     
+    .auth-section {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .user-info {
+      color: var(--accent-color);
+      font-weight: 500;
+    }
+    
+    .logout-btn {
+      background: var(--secondary-color);
+      border: none;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 0.8rem;
+    }
+    
+    .logout-btn:hover {
+      background: #e64a19;
+    }
+    
     .hero-section {
       height: 60vh;
-      background: linear-gradient(rgba(25, 40, 65, 0.7), rgba(25, 40, 65, 0.7)), url(smt.jpg);
+      background: linear-gradient(rgba(25, 40, 65, 0.7), rgba(25, 40, 65, 0.7)), url(bg.jpg);
       background-size: cover;
       background-position: center;
       color: var(--light-text);
@@ -623,14 +648,15 @@
 <header>
   <div class="logo">
     <i class="fas fa-bus"></i>
-    <h1>TravelEase</h1>
+    <h1>TravelHub</h1>
   </div>
   <nav>
     <a href="index.html"><i class="fas fa-home"></i> Home</a>
-    <a href="signin.html"><i class="fas fa-sign-in-alt"></i> Sign In</a>
-    <a href="signup.html"><i class="fas fa-user-plus"></i> Sign Up</a>
     <a href="#gallery"><i class="fas fa-images"></i> Gallery</a>
     <a href="#contact"><i class="fas fa-envelope"></i> Contact</a>
+    <div class="auth-section" id="auth-section">
+      <!-- Auth content will be populated by JavaScript -->
+    </div>
   </nav>
 </header>
 
@@ -743,20 +769,20 @@
       <div class="contact-card">
         <i class="fas fa-phone-alt"></i>
         <h3>Call Us</h3>
-        <p>+91 9876543210</p>
+        <p>+91 6374870878</p>
         <p>Mon-Sat: 8:00 AM - 8:00 PM</p>
       </div>
       <div class="contact-card">
         <i class="fas fa-envelope"></i>
         <h3>Email Us</h3>
-        <p>travelease@busbooking.com</p>
+        <p>travelhub@busbooking.com</p>
         <p>We respond within 24 hours</p>
       </div>
       <div class="contact-card">
         <i class="fas fa-map-marker-alt"></i>
         <h3>Visit Us</h3>
-        <p>123, Main Street, salem</p>
-        <p>Country - 600001</p>
+        <p>4/24,Kongu Street,salem</p>
+        <p>India</p>
       </div>
     </div>
     
@@ -805,7 +831,7 @@
         <li><a href="index.html">Home</a></li>
         <li><a href="about.html">About Us</a></li>
         <li><a href="services.html">Services</a></li>
-        <li><a href="routes.html">Routes</a></li>
+        
         <li><a href="contact.html">Contact Us</a></li>
       </ul>
     </div>
@@ -880,14 +906,23 @@
   async function confirmBooking(busName) {
     const token = localStorage.getItem('token');
     if (!token) {
-      alert('Please log in to book a seat.');
-      window.location.href = 'signin.html';
+      if (confirm('You need to login to book a seat. Would you like to go to the login page?')) {
+        window.location.href = 'signin.html';
+      }
       return;
     }
 
-    const email = prompt('Enter your email to confirm booking:');
-    const seatNumber = prompt('Enter your seat number:');
+    const seatNumber = prompt('Enter your preferred seat number (1-40):');
+    if (!seatNumber || isNaN(seatNumber) || seatNumber < 1 || seatNumber > 40) {
+      alert('Please enter a valid seat number (1-40)');
+      return;
+    }
+    
     const date = prompt('Enter the travel date (YYYY-MM-DD):');
+    if (!date || !isValidDate(date)) {
+      alert('Please enter a valid date in YYYY-MM-DD format');
+      return;
+    }
 
     try {
       const response = await fetch('http://localhost:5000/api/book-seat', {
@@ -896,23 +931,96 @@
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ email, busName, seatNumber, date }),
+        body: JSON.stringify({ busName, seatNumber: parseInt(seatNumber), date }),
       });
 
       const data = await response.json();
       if (response.ok) {
-        alert(data.message);
+        alert(`🎉 ${data.message}\n\nBooking Details:\n• Bus: ${busName}\n• Seat: ${seatNumber}\n• Date: ${date}`);
+        loadUserBookings(); // Refresh bookings if displayed
       } else {
-        alert(data.error || 'Booking failed');
+        alert(`❌ ${data.error || 'Booking failed'}`);
       }
     } catch (error) {
       console.error('Error:', error);
-      alert('An error occurred while booking the seat.');
+      alert('⚠️ An error occurred while booking the seat. Please try again.');
+    }
+  }
+  
+  function isValidDate(dateString) {
+    const regex = /^\d{4}-\d{2}-\d{2}$/;
+    if (!regex.test(dateString)) return false;
+    const date = new Date(dateString);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return date >= today && !isNaN(date.getTime());
+  }
+
+  // Authentication management
+  function updateAuthDisplay() {
+    const token = localStorage.getItem('token');
+    const authSection = document.getElementById('auth-section');
+    
+    if (token) {
+      // User is logged in
+      const userEmail = getUserEmailFromToken(token);
+      authSection.innerHTML = `
+        <span class="user-info">👋 ${userEmail || 'User'}</span>
+        <button class="logout-btn" onclick="logout()">Logout</button>
+      `;
+    } else {
+      // User is not logged in
+      authSection.innerHTML = `
+        <a href="signin.html">Sign In</a>
+        <a href="signup.html">Sign Up</a>
+      `;
+    }
+  }
+  
+  function getUserEmailFromToken(token) {
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload.email;
+    } catch (error) {
+      return null;
+    }
+  }
+  
+  function logout() {
+    if (confirm('Are you sure you want to logout?')) {
+      localStorage.removeItem('token');
+      alert('You have been logged out successfully!');
+      updateAuthDisplay();
+      // Optionally redirect to home or refresh page
+      window.location.reload();
+    }
+  }
+  
+  async function loadUserBookings() {
+    const token = localStorage.getItem('token');
+    if (!token) return;
+    
+    try {
+      const response = await fetch('http://localhost:5000/api/my-bookings', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        console.log('User bookings:', data.bookings);
+        // You can display bookings in UI if needed
+      }
+    } catch (error) {
+      console.error('Error loading bookings:', error);
     }
   }
 
   // Form submission handling
   document.addEventListener('DOMContentLoaded', function() {
+    updateAuthDisplay(); // Update auth display on page load
     document.getElementById('contact-form').addEventListener('submit', async function(e) {
       e.preventDefault();
       const name = document.getElementById('name').value;

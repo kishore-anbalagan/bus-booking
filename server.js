@@ -8,7 +8,7 @@ const path = require("path");
 require("dotenv").config();
 
 const app = express();
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI)
@@ -115,6 +115,11 @@ app.post("/api/book-seat", authenticateToken, async (req, res) => {
   const email = req.user.email; // Use email from token
 
   try {
+    // Validate input
+    if (!busName || !seatNumber || !date) {
+      return res.status(400).json({ error: "Bus name, seat number, and date are required." });
+    }
+
     // Check if a booking already exists for the same bus, seat, and date
     const existingBooking = await Booking.findOne({ busName, seatNumber, date });
     if (existingBooking) {
@@ -127,11 +132,29 @@ app.post("/api/book-seat", authenticateToken, async (req, res) => {
       return res.status(404).json({ error: "User not found" });
     }
 
+    // Check if user already has a booking for the same bus and date
+    const userExistingBooking = await Booking.findOne({ user: user._id, busName, date });
+    if (userExistingBooking) {
+      return res.status(400).json({ error: "You already have a booking for this bus on this date." });
+    }
+
     // Create a new booking document
     const booking = new Booking({ user: user._id, busName, seatNumber, date });
     await booking.save();
 
-    res.status(200).json({ message: "Seat booked successfully", bookings: user.bookings });
+    // Also add to user's bookings array for backward compatibility
+    user.bookings.push({ busName, seatNumber, date });
+    await user.save();
+
+    res.status(200).json({ 
+      message: "Seat booked successfully! 🎉", 
+      booking: {
+        busName,
+        seatNumber,
+        date,
+        userEmail: email
+      }
+    });
   } catch (error) {
     console.error("Error during booking:", error);
     res.status(500).json({ error: "Internal server error" });
