@@ -10,12 +10,13 @@ require("dotenv").config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Connect to MongoDB
-mongoose.connect(process.env.MONGO_URI)
+// ----------------- MongoDB Connection -----------------
+mongoose
+  .connect(process.env.MONGO_URI)
   .then(() => console.log("Connected to MongoDB"))
   .catch((err) => console.error("Failed to connect to MongoDB:", err));
 
-// Define User Schema4
+// ----------------- Schemas & Models -------------------
 const UserSchema = new mongoose.Schema({
   name: String,
   email: String,
@@ -32,33 +33,40 @@ const UserSchema = new mongoose.Schema({
 
 const User = mongoose.model("User", UserSchema);
 
-// Define Booking Schema
 const BookingSchema = new mongoose.Schema({
-  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   busName: String,
   seatNumber: Number,
   date: String,
 });
-const Booking = mongoose.model('Booking', BookingSchema);
 
-// Add after your other schemas
+const Booking = mongoose.model("Booking", BookingSchema);
+
 const MessageSchema = new mongoose.Schema({
   name: String,
   email: String,
   message: String,
-  date: { type: Date, default: Date.now }
+  date: { type: Date, default: Date.now },
 });
-const Message = mongoose.model('Message', MessageSchema);
 
-// Middleware
+const Message = mongoose.model("Message", MessageSchema);
+
+// ----------------- Middleware -------------------
 app.use(cors());
+
+// parse JSON bodies
 app.use(express.json());
+
+// parse form-urlencoded bodies (optional but safe)
+app.use(express.urlencoded({ extended: true }));
+
+// serve static files from "public" folder
 app.use(express.static(path.join(__dirname, "public")));
 
-// Add this middleware to extract user from JWT
+// ----------------- Auth Middleware -------------------
 function authenticateToken(req, res, next) {
-  const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.split(' ')[1];
+  const authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.split(" ")[1];
   if (!token) return res.sendStatus(401);
 
   jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
@@ -68,9 +76,22 @@ function authenticateToken(req, res, next) {
   });
 }
 
-// Register User
+// ----------------- Routes -------------------
+
+// Register User (SIGNUP)
 app.post("/api/signup", async (req, res) => {
-  const { name, email, password, phone } = req.body;
+  console.log("Signup body:", req.body); // debug log
+
+  // avoid crash when body is undefined
+  const { name, email, password, phone } = req.body || {};
+
+  // Basic validation
+  if (!name || !email || !password || !phone) {
+    return res
+      .status(400)
+      .json({ error: "All fields (name, email, password, phone) are required" });
+  }
+
   try {
     // Check if the user already exists
     const existingUser = await User.findOne({ email });
@@ -92,38 +113,52 @@ app.post("/api/signup", async (req, res) => {
   }
 });
 
-// Login User
+// Login User (SIGNIN)
 app.post("/api/signin", async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email, password } = req.body || {};
+
+    if (!email || !password) {
+      return res
+        .status(400)
+        .json({ error: "Email and password are required" });
+    }
+
     const user = await User.findOne({ email });
     if (!user) return res.status(404).json({ error: "User not found" });
 
     const isValid = await bcrypt.compare(password, user.password);
     if (!isValid) return res.status(401).json({ error: "Invalid credentials" });
 
-    const token = jwt.sign({ email: user.email }, process.env.JWT_SECRET, { expiresIn: "1h" });
+    const token = jwt.sign({ email: user.email }, process.env.JWT_SECRET, {
+      expiresIn: "1h",
+    });
     res.json({ token });
   } catch (error) {
+    console.error("Error logging in:", error);
     res.status(500).json({ error: "Error logging in" });
   }
 });
 
 // Book a Seat
 app.post("/api/book-seat", authenticateToken, async (req, res) => {
-  const { busName, seatNumber, date } = req.body;
+  const { busName, seatNumber, date } = req.body || {};
   const email = req.user.email; // Use email from token
 
   try {
     // Validate input
     if (!busName || !seatNumber || !date) {
-      return res.status(400).json({ error: "Bus name, seat number, and date are required." });
+      return res
+        .status(400)
+        .json({ error: "Bus name, seat number, and date are required." });
     }
 
     // Check if a booking already exists for the same bus, seat, and date
     const existingBooking = await Booking.findOne({ busName, seatNumber, date });
     if (existingBooking) {
-      return res.status(400).json({ error: "Seat already booked for this bus and date." });
+      return res
+        .status(400)
+        .json({ error: "Seat already booked for this bus and date." });
     }
 
     // Find the user by email
@@ -133,9 +168,15 @@ app.post("/api/book-seat", authenticateToken, async (req, res) => {
     }
 
     // Check if user already has a booking for the same bus and date
-    const userExistingBooking = await Booking.findOne({ user: user._id, busName, date });
+    const userExistingBooking = await Booking.findOne({
+      user: user._id,
+      busName,
+      date,
+    });
     if (userExistingBooking) {
-      return res.status(400).json({ error: "You already have a booking for this bus on this date." });
+      return res
+        .status(400)
+        .json({ error: "You already have a booking for this bus on this date." });
     }
 
     // Create a new booking document
@@ -146,14 +187,14 @@ app.post("/api/book-seat", authenticateToken, async (req, res) => {
     user.bookings.push({ busName, seatNumber, date });
     await user.save();
 
-    res.status(200).json({ 
-      message: "Seat booked successfully! 🎉", 
+    res.status(200).json({
+      message: "Seat booked successfully! 🎉",
       booking: {
         busName,
         seatNumber,
         date,
-        userEmail: email
-      }
+        userEmail: email,
+      },
     });
   } catch (error) {
     console.error("Error during booking:", error);
@@ -161,9 +202,9 @@ app.post("/api/book-seat", authenticateToken, async (req, res) => {
   }
 });
 
-// Add after your other routes
+// Contact / Messages
 app.post("/api/messages", async (req, res) => {
-  const { name, email, message } = req.body;
+  const { name, email, message } = req.body || {};
   if (!message || !message.trim()) {
     return res.status(400).json({ error: "Message cannot be empty" });
   }
@@ -179,9 +220,17 @@ app.post("/api/messages", async (req, res) => {
 
 // Get My Bookings
 app.get("/api/my-bookings", authenticateToken, async (req, res) => {
-  const user = await User.findOne({ email: req.user.email });
-  const bookings = await Booking.find({ user: user._id });
-  res.json({ bookings });
+  try {
+    const user = await User.findOne({ email: req.user.email });
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    const bookings = await Booking.find({ user: user._id });
+    res.json({ bookings });
+  } catch (error) {
+    console.error("Error fetching bookings:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
 });
 
 // Serve Frontend
@@ -190,4 +239,6 @@ app.get("/", (req, res) => {
 });
 
 // Start Server
-app.listen(PORT, () => console.log(`Server running at http://localhost:${PORT}`));
+app.listen(PORT, () => {
+  console.log(`Server running at http://localhost:${PORT}`);
+});
