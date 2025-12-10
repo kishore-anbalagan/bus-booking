@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bus Booking System</title>
+  <title>Bus Booking System - TravelEase</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
@@ -70,6 +70,7 @@
     nav {
       display: flex;
       gap: 15px;
+      align-items: center;
     }
     
     nav a {
@@ -118,9 +119,7 @@
     
     .hero-section {
       height: 60vh;
-      background: linear-gradient(rgba(25, 40, 65, 0.7), rgba(25, 40, 65, 0.7)), url(bg.jpg);
-      background-size: cover;
-      background-position: center;
+      background: #000;
       color: var(--light-text);
       display: flex;
       flex-direction: column;
@@ -130,6 +129,22 @@
       padding: 2rem;
       position: relative;
       overflow: hidden;
+    }
+
+    .hero-bg-video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 0;
+      opacity: 0.6;
+    }
+
+    .hero-section > *:not(video) {
+      position: relative;
+      z-index: 1;
     }
     
     .hero-section h2 {
@@ -162,6 +177,36 @@
       background: #e64a19;
       transform: translateY(-5px);
       box-shadow: 0 8px 25px rgba(255, 87, 34, 0.5);
+    }
+
+    .hero-benefits {
+      list-style: none;
+      margin: 1rem 0 2rem 0;
+      padding: 0;
+      display: flex;
+      gap: 1.5rem;
+      justify-content: center;
+      color: var(--light-text);
+      font-size: 1.1rem;
+    }
+    .hero-benefits li {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .scroll-down {
+      margin-top: 2rem;
+      color: var(--light-text);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-size: 1.2rem;
+      opacity: 0.8;
+      animation: bounce 2s infinite;
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0);}
+      50% { transform: translateY(10px);}
     }
     
     .container {
@@ -241,7 +286,6 @@
       border-radius: 12px;
       overflow: hidden;
       box-shadow: var(--shadow);
-      transition: all 0.3s;
     }
     
     .bus-card:hover {
@@ -520,12 +564,14 @@
     
     .footer-section ul li {
       margin-bottom: 10px;
+      color: #aaa;
+      font-size: 0.95rem;
     }
     
     .footer-section ul li a {
       color: #aaa;
       text-decoration: none;
-      transition: color 0.3s;
+      transition: color 0.3s, padding-left 0.3s;
     }
     
     .footer-section ul li a:hover {
@@ -585,47 +631,19 @@
         transform: translateY(0);
       }
     }
-
-    .hero-benefits {
-      list-style: none;
-      margin: 1rem 0 2rem 0;
-      padding: 0;
-      display: flex;
-      gap: 1.5rem;
-      justify-content: center;
-      color: var(--light-text);
-      font-size: 1.1rem;
-    }
-    .hero-benefits li {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-    .scroll-down {
-      margin-top: 2rem;
-      color: var(--light-text);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      font-size: 1.2rem;
-      opacity: 0.8;
-      animation: bounce 2s infinite;
-    }
-    @keyframes bounce {
-      0%, 100% { transform: translateY(0);}
-      50% { transform: translateY(10px);}
-    }
     
     @media (max-width: 768px) {
       header {
         flex-direction: column;
         padding: 15px;
+        align-items: flex-start;
       }
       
       nav {
         margin-top: 15px;
         flex-wrap: wrap;
-        justify-content: center;
+        justify-content: flex-start;
+        gap: 10px;
       }
       
       .section {
@@ -648,14 +666,15 @@
 <header>
   <div class="logo">
     <i class="fas fa-bus"></i>
-    <h1>TravelHub</h1>
+    <h1>TravelEase</h1>
   </div>
   <nav>
     <a href="index.html"><i class="fas fa-home"></i> Home</a>
-    <a href="#gallery"><i class="fas fa-images"></i> Gallery</a>
-    <a href="#contact"><i class="fas fa-envelope"></i> Contact</a>
+    <a href="about.html"><i class="fas fa-info-circle"></i> About</a>
+    <a href="routes.html"><i class="fas fa-road"></i> Routes</a>
+    <a href="contact.html"><i class="fas fa-envelope"></i> Contact</a>
     <div class="auth-section" id="auth-section">
-      <!-- Auth content will be populated by JavaScript -->
+      <!-- filled by JS -->
     </div>
   </nav>
 </header>
@@ -680,9 +699,11 @@
     <span>See available buses below</span>
   </div>
 </section>
+
 <br>
+
 <div class="container">
-  <!-- Features Section -->
+  <!-- Features -->
   <div class="features-cards" data-aos="fade-up">
     <div class="feature-card">
       <i class="fas fa-money-bill-wave"></i>
@@ -706,13 +727,13 @@
     </div>
   </div>
 
-  <!-- Available Buses Section -->
+  <!-- Available Buses -->
   <section class="section" data-aos="fade-up">
     <h2>Available Buses</h2>
     <div class="bus-list" id="bus-list"></div>
   </section>
 
-  <!-- Gallery Section -->
+  <!-- Gallery -->
   <section class="section" id="gallery" data-aos="fade-up">
     <h2>Our Fleet Gallery</h2>
     <div class="gallery">
@@ -731,12 +752,14 @@
     </div>
   </section>
 
-  <!-- Testimonials Section -->
+  <!-- Testimonials -->
   <section class="section" data-aos="fade-up">
     <h2>What Our Customers Say</h2>
     <div class="testimonials">
       <div class="testimonial">
-        <p class="testimonial-content">Booking a bus has never been this easy and reliable. Their punctuality and comfort are unmatched. Highly recommended service!</p>
+        <p class="testimonial-content">
+          Booking a bus has never been this easy and reliable. Their punctuality and comfort are unmatched. Highly recommended service!
+        </p>
         <div class="testimonial-author">
           <div class="testimonial-author-img">
             <i class="fas fa-user"></i>
@@ -748,13 +771,15 @@
         </div>
       </div>
       <div class="testimonial">
-        <p class="testimonial-content">The online booking system is intuitive, and the bus condition was excellent. Staff was courteous and helpful throughout the journey.</p>
+        <p class="testimonial-content">
+          The online booking system is intuitive, and the bus condition was excellent. Staff was courteous and helpful throughout the journey.
+        </p>
         <div class="testimonial-author">
           <div class="testimonial-author-img">
             <i class="fas fa-user"></i>
           </div>
           <div class="testimonial-author-info">
-            <h4>surendhar </h4>
+            <h4>Surendhar</h4>
             <p>Business Traveler</p>
           </div>
         </div>
@@ -762,7 +787,7 @@
     </div>
   </section>
 
-  <!-- Contact Section -->
+  <!-- Contact -->
   <section class="section" id="contact" data-aos="fade-up">
     <h2>Get In Touch</h2>
     <div class="contact-grid">
@@ -781,7 +806,7 @@
       <div class="contact-card">
         <i class="fas fa-map-marker-alt"></i>
         <h3>Visit Us</h3>
-        <p>4/24,Kongu Street,salem</p>
+        <p>4/24, Kongu Street, Salem</p>
         <p>India</p>
       </div>
     </div>
@@ -792,11 +817,11 @@
         <div class="form-grid">
           <div class="form-group">
             <label for="name">Your Name</label>
-            <input type="text" id="name" placeholder="Enter your name">
+            <input type="text" id="name" placeholder="Enter your name" required>
           </div>
           <div class="form-group">
             <label for="email">Email Address</label>
-            <input type="email" id="email" placeholder="Enter your email">
+            <input type="email" id="email" placeholder="Enter your email" required>
           </div>
         </div>
         <div class="form-group">
@@ -805,7 +830,7 @@
         </div>
         <div class="form-group">
           <label for="message">Message</label>
-          <textarea id="message" rows="5" placeholder="Enter your message"></textarea>
+          <textarea id="message" rows="5" placeholder="Enter your message" required></textarea>
         </div>
         <button type="submit" class="submit-btn">Send Message</button>
       </form>
@@ -816,7 +841,7 @@
 <footer>
   <div class="footer-container">
     <div class="footer-section">
-      <h3>TravelEase </h3>
+      <h3>TravelEase</h3>
       <p>Your reliable partner for comfortable and affordable bus travel across the country.</p>
       <div class="social-links">
         <a href="https://www.facebook.com/"><i class="fab fa-facebook-f"></i></a>
@@ -830,25 +855,23 @@
       <ul>
         <li><a href="index.html">Home</a></li>
         <li><a href="about.html">About Us</a></li>
-        <li><a href="services.html">Services</a></li>
-        
+        <li><a href="routes.html">Routes</a></li>
         <li><a href="contact.html">Contact Us</a></li>
       </ul>
     </div>
     <div class="footer-section">
       <h3>Support</h3>
       <ul>
-        <li>FAQs</a></li>
-        <li>Terms & Conditions</a></li>
-        <li>Privacy Policy</a></li>
-        <li>Cancellation & Refund</a></li>
-        <li>Help & Support</a></li>
+        <li>FAQs</li>
+        <li>Terms &amp; Conditions</li>
+        <li>Privacy Policy</li>
+        <li>Cancellation &amp; Refund</li>
+        <li>Help &amp; Support</li>
       </ul>
     </div>
     <div class="footer-section">
       <h3>Newsletter</h3>
       <p>Subscribe to get updates on new routes and exclusive offers.</p>
-      
     </div>
   </div>
   <div class="copyright">
@@ -862,6 +885,11 @@
     easing: 'ease-in-out',
     once: true
   });
+
+  // 🔥 Backend base URL: local vs Render
+  const API_BASE = window.location.origin.includes("localhost")
+    ? "http://localhost:5000"
+    : "https://bus-booking-cnxe.onrender.com";
 
   const buses = [
     { name: "SMT TRAVELS", departure: "10:00 AM", arrival: "2:00 PM", fare: "₹500", type: "AC Sleeper" },
@@ -925,7 +953,7 @@
     }
 
     try {
-      const response = await fetch('http://localhost:5000/api/book-seat', {
+      const response = await fetch(`${API_BASE}/api/book-seat`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -937,7 +965,7 @@
       const data = await response.json();
       if (response.ok) {
         alert(`🎉 ${data.message}\n\nBooking Details:\n• Bus: ${busName}\n• Seat: ${seatNumber}\n• Date: ${date}`);
-        loadUserBookings(); // Refresh bookings if displayed
+        loadUserBookings(); // (you can extend this to show in UI)
       } else {
         alert(`❌ ${data.error || 'Booking failed'}`);
       }
@@ -956,20 +984,18 @@
     return date >= today && !isNaN(date.getTime());
   }
 
-  // Authentication management
+  // Auth UI
   function updateAuthDisplay() {
     const token = localStorage.getItem('token');
     const authSection = document.getElementById('auth-section');
     
     if (token) {
-      // User is logged in
       const userEmail = getUserEmailFromToken(token);
       authSection.innerHTML = `
         <span class="user-info">👋 ${userEmail || 'User'}</span>
         <button class="logout-btn" onclick="logout()">Logout</button>
       `;
     } else {
-      // User is not logged in
       authSection.innerHTML = `
         <a href="signin.html">Sign In</a>
         <a href="signup.html">Sign Up</a>
@@ -991,7 +1017,6 @@
       localStorage.removeItem('token');
       alert('You have been logged out successfully!');
       updateAuthDisplay();
-      // Optionally redirect to home or refresh page
       window.location.reload();
     }
   }
@@ -1001,7 +1026,7 @@
     if (!token) return;
     
     try {
-      const response = await fetch('http://localhost:5000/api/my-bookings', {
+      const response = await fetch(`${API_BASE}/api/my-bookings`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`
@@ -1011,38 +1036,44 @@
       if (response.ok) {
         const data = await response.json();
         console.log('User bookings:', data.bookings);
-        // You can display bookings in UI if needed
+        // TODO: render bookings in UI if you want
       }
     } catch (error) {
       console.error('Error loading bookings:', error);
     }
   }
 
-  // Form submission handling
   document.addEventListener('DOMContentLoaded', function() {
-    updateAuthDisplay(); // Update auth display on page load
+    updateAuthDisplay();
+    
     document.getElementById('contact-form').addEventListener('submit', async function(e) {
       e.preventDefault();
-      const name = document.getElementById('name').value;
-      const email = document.getElementById('email').value;
-      const message = document.getElementById('message').value;
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const message = document.getElementById('message').value.trim();
 
-      if (!message.trim()) {
+      if (!message) {
         alert('Please enter a message.');
         return;
       }
 
-      const response = await fetch('/api/messages', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, message })
-      });
+      try {
+        const response = await fetch(`${API_BASE}/api/messages`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, email, message })
+        });
 
-      if (response.ok) {
-        alert('Thank you for your message! We will get back to you soon.');
-        document.getElementById('contact-form').reset();
-      } else {
-        alert('There was an error sending your message.');
+        const data = await response.json();
+        if (response.ok) {
+          alert(data.message || 'Thank you for your message! We will get back to you soon.');
+          document.getElementById('contact-form').reset();
+        } else {
+          alert(data.error || 'There was an error sending your message.');
+        }
+      } catch (err) {
+        console.error('Contact error:', err);
+        alert('Network error. Please try again.');
       }
     });
   });

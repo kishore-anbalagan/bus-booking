@@ -1,36 +1,318 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Our Services</title>
-  <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Our Services - TravelEase Bus Booking</title>
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet" />
+
+  <style>
+    :root {
+      --primary-color: #3a86ff;
+      --secondary-color: #ff5722;
+      --accent-color: #4cc9f0;
+      --dark-color: #192841;
+      --text-color: #333;
+      --light-text: #f8f9fa;
+      --bg-light: #f5f7fa;
+      --shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      transition: 0.2s ease;
+    }
+
+    body {
+      font-family: "Segoe UI", Tahoma, sans-serif;
+      background: var(--bg-light);
+      color: var(--text-color);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Header */
+    header {
+      background: linear-gradient(to right, var(--dark-color), #2d4263);
+      padding: 15px 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--light-text);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: var(--shadow);
+    }
+
+    header .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    header .logo i {
+      font-size: 1.5rem;
+      color: var(--accent-color);
+    }
+
+    header h1 {
+      font-size: 1.4rem;
+      margin: 0;
+    }
+
+    nav a {
+      color: var(--light-text);
+      text-decoration: none;
+      margin-left: 15px;
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+
+    nav a:hover {
+      color: var(--secondary-color);
+    }
+
+    /* Main */
+    .main-container {
+      flex: 1;
+      padding: 40px 8%;
+    }
+
+    .page-header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .page-header h2 {
+      font-size: 2rem;
+      color: var(--dark-color);
+      margin-bottom: 8px;
+    }
+
+    .page-header p {
+      color: #555;
+      font-size: 0.98rem;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 25px;
+      margin-bottom: 40px;
+    }
+
+    .service-card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 25px;
+      box-shadow: var(--shadow);
+      text-align: left;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .service-card::before {
+      content: "";
+      position: absolute;
+      top: -40px;
+      right: -40px;
+      width: 90px;
+      height: 90px;
+      background: rgba(58, 134, 255, 0.1);
+      border-radius: 50%;
+    }
+
+    .service-icon {
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      background: rgba(58, 134, 255, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 15px;
+    }
+
+    .service-icon i {
+      font-size: 1.4rem;
+      color: var(--primary-color);
+    }
+
+    .service-card h3 {
+      margin-bottom: 10px;
+      color: var(--dark-color);
+    }
+
+    .service-card p {
+      font-size: 0.95rem;
+      color: #555;
+      margin-bottom: 10px;
+    }
+
+    .service-tag {
+      display: inline-block;
+      margin-top: 5px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: rgba(255, 87, 34, 0.08);
+      color: var(--secondary-color);
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .highlight-box {
+      margin-top: 10px;
+      padding: 12px 15px;
+      border-radius: 10px;
+      background: rgba(58, 134, 255, 0.06);
+      border-left: 4px solid var(--primary-color);
+      font-size: 0.9rem;
+      color: #444;
+    }
+
+    /* Footer */
+    footer {
+      background: var(--dark-color);
+      color: #ccc;
+      text-align: center;
+      padding: 15px;
+      font-size: 0.9rem;
+      margin-top: auto;
+    }
+
+    footer a {
+      color: var(--secondary-color);
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 700px) {
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+      }
+
+      nav a {
+        margin-left: 0;
+        margin-right: 10px;
+      }
+
+      .main-container {
+        padding: 25px 5%;
+      }
+
+      .service-card {
+        padding: 20px;
+      }
+    }
+  </style>
 </head>
+
 <body>
+  <!-- HEADER -->
   <header>
-    <h1>Our Services</h1>
+    <div class="logo">
+      <i class="fas fa-bus"></i>
+      <h1>TravelEase</h1>
+    </div>
     <nav>
-      <a href="index.html">Home</a> |
-      <a href="about.html">About Us</a> |
-      <a href="services.html">Services</a> |
-      <a href="routes.html">Routes</a> |
-      <a href="contact.html">Contact Us</a>
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="services.html">Services</a>
+      <a href="routes.html">Routes</a>
+      <a href="contact.html">Contact</a>
     </nav>
   </header>
-  <main>
-    <section>
-      <h2>What We Offer</h2>
-      <ul>
-        <li>Online bus ticket booking</li>
-        <li>Comfortable and air-conditioned buses</li>
-        <li>Multiple daily routes and flexible timings</li>
-        <li>Real-time seat availability and booking</li>
-        <li>24/7 customer support</li>
-        <li>Safe and punctual travel</li>
-      </ul>
-    </section>
-  </main>
+
+  <!-- MAIN -->
+  <div class="main-container">
+    <div class="page-header" data-aos="fade-up">
+      <h2>Our Services</h2>
+      <p>We provide everything you need for a smooth, safe, and convenient journey.</p>
+    </div>
+
+    <div class="services-grid" data-aos="fade-up">
+      <div class="service-card">
+        <div class="service-icon">
+          <i class="fas fa-ticket-alt"></i>
+        </div>
+        <h3>Online Bus Ticket Booking</h3>
+        <p>Book tickets instantly from your mobile or laptop, anywhere and anytime.</p>
+        <span class="service-tag">Core Service</span>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">
+          <i class="fas fa-couch"></i>
+        </div>
+        <h3>Comfortable AC & Non-AC Buses</h3>
+        <p>Choose between air-conditioned and non-AC buses with ergonomic, cushioned seating.</p>
+        <span class="service-tag">Comfort</span>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">
+          <i class="fas fa-route"></i>
+        </div>
+        <h3>Multiple Routes & Flexible Timings</h3>
+        <p>Daily services across popular routes with multiple departure slots to suit your schedule.</p>
+        <span class="service-tag">Coverage</span>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">
+          <i class="fas fa-th-list"></i>
+        </div>
+        <h3>Real-Time Seat Availability</h3>
+        <p>View and select seats in real-time while booking, so you always get your preferred spot.</p>
+        <span class="service-tag">Smart Booking</span>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">
+          <i class="fas fa-headset"></i>
+        </div>
+        <h3>24/7 Customer Support</h3>
+        <p>Our support team is available round-the-clock to help you with bookings and queries.</p>
+        <span class="service-tag">Support</span>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">
+          <i class="fas fa-shield-alt"></i>
+        </div>
+        <h3>Safe & Punctual Travel</h3>
+        <p>Experienced drivers, well-maintained buses, and on-time departures for a safe journey.</p>
+        <span class="service-tag">Safety</span>
+      </div>
+    </div>
+
+    <div class="highlight-box" data-aos="fade-up">
+      <strong>Need group booking or corporate travel?</strong><br />
+      We also support bulk bookings and customized travel plans for schools, colleges, and companies. Contact us via the
+      <a href="contact.html">Contact</a> page to know more.
+    </div>
+  </div>
+
+  <!-- FOOTER -->
   <footer>
-    <p>&copy; 2024 Your Bus Company. All rights reserved.</p>
+    <p>© 2025 TravelEase Bus Booking System | <a href="#">Privacy Policy</a></p>
   </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+  <script>
+    AOS.init({ duration: 800, once: true });
+  </script>
 </body>
 </html>

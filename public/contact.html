@@ -1,45 +1,373 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Contact Us</title>
-  <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact Us - TravelEase Bus Booking</title>
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet" />
+
+  <style>
+    :root {
+      --primary-color: #3a86ff;
+      --secondary-color: #ff5722;
+      --accent-color: #4cc9f0;
+      --dark-color: #192841;
+      --text-color: #333;
+      --light-text: #f8f9fa;
+      --bg-light: #f5f7fa;
+      --shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      transition: 0.2s ease;
+    }
+
+    body {
+      font-family: "Segoe UI", Tahoma, sans-serif;
+      background: var(--bg-light);
+      color: var(--text-color);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Header */
+    header {
+      background: linear-gradient(to right, var(--dark-color), #2d4263);
+      padding: 15px 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--light-text);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: var(--shadow);
+    }
+
+    header .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    header .logo i {
+      font-size: 1.5rem;
+      color: var(--accent-color);
+    }
+
+    header h1 {
+      font-size: 1.4rem;
+      margin: 0;
+    }
+
+    nav a {
+      color: var(--light-text);
+      text-decoration: none;
+      margin-left: 15px;
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+
+    nav a:hover {
+      color: var(--secondary-color);
+    }
+
+    /* Main Layout */
+    .main-container {
+      flex: 1;
+      padding: 40px 8%;
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      gap: 30px;
+    }
+
+    .contact-info,
+    .contact-form-wrapper {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      padding: 25px 25px 30px;
+    }
+
+    .contact-info h2,
+    .contact-form-wrapper h2 {
+      color: var(--dark-color);
+      margin-bottom: 10px;
+    }
+
+    .contact-info p {
+      margin-bottom: 10px;
+      font-size: 0.98rem;
+    }
+
+    .info-item {
+      display: flex;
+      align-items: center;
+      margin: 10px 0;
+      gap: 10px;
+    }
+
+    .info-item i {
+      color: var(--primary-color);
+      font-size: 1rem;
+      width: 24px;
+      text-align: center;
+    }
+
+    .info-item span {
+      font-size: 0.95rem;
+    }
+
+    .highlight-box {
+      background: rgba(58, 134, 255, 0.08);
+      border-left: 4px solid var(--primary-color);
+      padding: 10px 15px;
+      border-radius: 8px;
+      margin-top: 15px;
+      font-size: 0.9rem;
+    }
+
+    /* Form Styles */
+    form label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+
+    form input,
+    form textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+      margin-bottom: 15px;
+      font-size: 0.95rem;
+    }
+
+    form input:focus,
+    form textarea:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(58, 134, 255, 0.1);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    .btn-submit {
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 20px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-submit:hover {
+      background: #2a75e6;
+      box-shadow: var(--shadow);
+      transform: translateY(-2px);
+    }
+
+    .status-message {
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+
+    .status-success {
+      color: #2e7d32;
+    }
+
+    .status-error {
+      color: #c62828;
+    }
+
+    /* Footer */
+    footer {
+      background: var(--dark-color);
+      color: #ccc;
+      text-align: center;
+      padding: 15px;
+      font-size: 0.85rem;
+      margin-top: auto;
+    }
+
+    footer a {
+      color: var(--secondary-color);
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 900px) {
+      .main-container {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 600px) {
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+      }
+
+      nav a {
+        margin-left: 0;
+        margin-right: 10px;
+      }
+
+      .main-container {
+        padding: 20px 5%;
+      }
+    }
+  </style>
 </head>
+
 <body>
+  <!-- HEADER -->
   <header>
-    <h1>Contact Us</h1>
+    <div class="logo">
+      <i class="fas fa-bus"></i>
+      <h1>TravelEase</h1>
+    </div>
     <nav>
-      <a href="index.html">Home</a> |
-      <a href="about.html">About Us</a> |
-      <a href="services.html">Services</a> |
-      <a href="routes.html">Routes</a> 
-      <a href="contact.html">Contact Us</a>
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="services.html">Services</a>
+      <a href="routes.html">Routes</a>
+      <a href="contact.html">Contact</a>
     </nav>
   </header>
-  <main>
-    <section>
-      <h2>Get in Touch</h2>
-      <p>
-        Have questions or need help? Reach out to us!
-      </p>
-      <ul>
-        <li>Email: <a href="mailto:support@yourbuscompany.com">support@yourbuscompany.com</a></li>
-        <li>Phone: +1-234-567-8901</li>
-        <li>Address: 123 Main Street, Your City, Country</li>
-      </ul>
-      <form>
-        <label for="name">Name:</label><br>
-        <input type="text" id="name" name="name" required><br>
-        <label for="email">Email:</label><br>
-        <input type="email" id="email" name="email" required><br>
-        <label for="message">Message:</label><br>
-        <textarea id="message" name="message" rows="4" required></textarea><br>
-        <button type="submit">Send Message</button>
+
+  <!-- MAIN -->
+  <div class="main-container">
+    <!-- LEFT: Info -->
+    <div class="contact-info" data-aos="fade-right">
+      <h2>Contact Us</h2>
+      <p>Have questions or need help with a booking? We're here for you.</p>
+
+      <div class="info-item">
+        <i class="fas fa-envelope"></i>
+        <span>support@traveleasebus.com</span>
+      </div>
+
+      <div class="info-item">
+        <i class="fas fa-phone"></i>
+        <span>+91-98765-43210</span>
+      </div>
+
+      <div class="info-item">
+        <i class="fas fa-location-dot"></i>
+        <span>TravelEase HQ, Main Road, Your City, India</span>
+      </div>
+
+      <div class="highlight-box">
+        <strong>Support hours:</strong><br />
+        9:00 AM – 9:00 PM (IST), Monday to Saturday<br />
+        We usually respond within a few hours.
+      </div>
+    </div>
+
+    <!-- RIGHT: Form -->
+    <div class="contact-form-wrapper" data-aos="fade-left">
+      <h2>Send Us a Message</h2>
+      <p>Fill in the form below and we'll get back to you as soon as possible.</p>
+
+      <form id="contact-form">
+        <label for="name">Name</label>
+        <input type="text" id="name" required />
+
+        <label for="email">Email</label>
+        <input type="email" id="email" required />
+
+        <label for="message">Message</label>
+        <textarea id="message" rows="4" required></textarea>
+
+        <button type="submit" class="btn-submit">
+          <i class="fas fa-paper-plane"></i> Send Message
+        </button>
+
+        <div id="status" class="status-message"></div>
       </form>
-    </section>
-  </main>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
   <footer>
-    <p>&copy; 2024 Your Bus Company. All rights reserved.</p>
+    <p>
+      © 2025 TravelEase Bus Booking System |
+      <a href="#">Privacy Policy</a>
+    </p>
   </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+  <script>
+    AOS.init({ duration: 800, once: true });
+
+    // Auto-detect API base: local vs Render
+    const API_BASE = window.location.origin.includes("localhost")
+      ? "http://localhost:5000"
+      : "https://bus-booking-cnxe.onrender.com";
+
+    const form = document.getElementById("contact-form");
+    const statusEl = document.getElementById("status");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      statusEl.textContent = "";
+      statusEl.className = "status-message";
+
+      const name = document.getElementById("name").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const message = document.getElementById("message").value.trim();
+
+      if (!name || !email || !message) {
+        statusEl.textContent = "Please fill in all fields.";
+        statusEl.classList.add("status-error");
+        return;
+      }
+
+      try {
+        const response = await fetch(`${API_BASE}/api/messages`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name, email, message }),
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          statusEl.textContent = data.message || "Message sent successfully!";
+          statusEl.classList.add("status-success");
+          form.reset();
+        } else {
+          statusEl.textContent = data.error || "Failed to send message.";
+          statusEl.classList.add("status-error");
+        }
+      } catch (err) {
+        console.error("Contact error:", err);
+        statusEl.textContent = "Network error. Please try again.";
+        statusEl.classList.add("status-error");
+      }
+    });
+  </script>
 </body>
 </html>

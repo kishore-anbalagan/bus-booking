@@ -1,52 +1,273 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Bus Routes</title>
-  <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <title>Bus Routes - TravelEase</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet" />
+
+  <style>
+    :root {
+      --primary-color: #3a86ff;
+      --secondary-color: #ff5722;
+      --accent-color: #4cc9f0;
+      --dark-color: #192841;
+      --text-color: #333;
+      --light-text: #f8f9fa;
+      --bg-light: #f5f7fa;
+      --shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      transition: 0.2s ease;
+    }
+
+    body {
+      font-family: "Segoe UI", Tahoma, sans-serif;
+      background: var(--bg-light);
+      color: var(--text-color);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Header */
+    header {
+      background: linear-gradient(to right, var(--dark-color), #2d4263);
+      padding: 15px 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--light-text);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: var(--shadow);
+    }
+
+    header .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    header .logo i {
+      font-size: 1.5rem;
+      color: var(--accent-color);
+    }
+
+    header h1 {
+      font-size: 1.4rem;
+      margin: 0;
+    }
+
+    nav a {
+      color: var(--light-text);
+      text-decoration: none;
+      margin-left: 15px;
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+
+    nav a:hover {
+      color: var(--secondary-color);
+    }
+
+    /* Main */
+    .main-container {
+      flex: 1;
+      padding: 40px 8%;
+    }
+
+    .routes-header {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .routes-header h2 {
+      color: var(--dark-color);
+      font-size: 2rem;
+      margin-bottom: 8px;
+    }
+
+    .routes-header p {
+      color: #555;
+      font-size: 0.98rem;
+    }
+
+    .routes-card {
+      background: #fff;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+
+    th,
+    td {
+      padding: 12px 10px;
+      font-size: 0.95rem;
+      text-align: left;
+      border-bottom: 1px solid #eee;
+    }
+
+    th {
+      background: #edf2ff;
+      color: var(--dark-color);
+      font-weight: 600;
+    }
+
+    tr:hover {
+      background: rgba(58, 134, 255, 0.05);
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      background: rgba(255, 87, 34, 0.08);
+      color: var(--secondary-color);
+      font-weight: 600;
+    }
+
+    .note {
+      margin-top: 15px;
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    .note strong {
+      color: var(--primary-color);
+    }
+
+    /* Footer */
+    footer {
+      background: var(--dark-color);
+      color: #ccc;
+      text-align: center;
+      padding: 15px;
+      font-size: 0.85rem;
+      margin-top: auto;
+    }
+
+    footer a {
+      color: var(--secondary-color);
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 700px) {
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+      }
+
+      nav a {
+        margin-left: 0;
+        margin-right: 10px;
+      }
+
+      .routes-card {
+        padding: 15px;
+      }
+
+      th, td {
+        font-size: 0.85rem;
+        padding: 8px 5px;
+      }
+    }
+  </style>
 </head>
+
 <body>
+  <!-- HEADER -->
   <header>
-    <h1>Our Bus Routes</h1>
+    <div class="logo">
+      <i class="fas fa-bus"></i>
+      <h1>TravelEase</h1>
+    </div>
     <nav>
-      <a href="index.html">Home</a> |
-      <a href="about.html">About Us</a> |
-      <a href="services.html">Services</a> |
-      <a href="rout`es.html">Routes</a> |
-      <a href="contact.html">Contact Us</a>
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="services.html">Services</a>
+      <a href="routes.html">Routes</a>
+      <a href="contact.html">Contact</a>
     </nav>
   </header>
-  <main>
-    <section>
+
+  <!-- MAIN -->
+  <div class="main-container">
+    <div class="routes-header" data-aos="fade-up">
       <h2>Popular Routes</h2>
-      <table border="1" cellpadding="8">
-        <tr>
-          <th>From</th>
-          <th>To</th>
-          <th>Departure Times</th>
-        </tr>
-        <tr>
-          <td>Chennai</td>
-          <td>Bangalore</td>
-          <td>08:00, 12:00, 18:00</td>
-        </tr>
-        <tr>
-          <td>Bangalore</td>
-          <td>Hyderabad</td>
-          <td>09:00, 15:00, 20:00</td>
-        </tr>
-        <tr>
-          <td>Chennai</td>
-          <td>Hyderabad</td>
-          <td>07:30, 13:30, 19:30</td>
-        </tr>
-        
+      <p>Explore some of our most frequently booked bus routes.</p>
+    </div>
+
+    <div class="routes-card" data-aos="fade-up">
+      <table>
+        <thead>
+          <tr>
+            <th>From</th>
+            <th>To</th>
+            <th>Departure Times</th>
+            <th>Type</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Chennai</td>
+            <td>Bangalore</td>
+            <td>08:00, 12:00, 18:00</td>
+            <td><span class="badge">Daily</span></td>
+          </tr>
+          <tr>
+            <td>Bangalore</td>
+            <td>Hyderabad</td>
+            <td>09:00, 15:00, 20:00</td>
+            <td><span class="badge">Daily</span></td>
+          </tr>
+          <tr>
+            <td>Chennai</td>
+            <td>Hyderabad</td>
+            <td>07:30, 13:30, 19:30</td>
+            <td><span class="badge">Daily</span></td>
+          </tr>
+        </tbody>
       </table>
-      <p>For a full list of routes and timings, please contact our support team.</p>
-    </section>
-  </main>
+
+      <p class="note">
+        <strong>Note:</strong> Departure times may vary on weekends and holidays.
+        For a full list of routes and live availability, please check our booking
+        page or contact our support team.
+      </p>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
   <footer>
-    <p>&copy; 2024 Your Bus Company. All rights reserved.</p>
+    <p>© 2025 TravelEase Bus Booking System | <a href="#">Privacy Policy</a></p>
   </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+  <script>
+    AOS.init({ duration: 800, once: true });
+  </script>
 </body>
 </html>

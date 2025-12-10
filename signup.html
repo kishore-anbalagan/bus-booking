@@ -443,20 +443,61 @@
     easing: 'ease-in-out',
     once: true
   });
-  
-  document.getElementById('signup-form').addEventListener('submit', function(e) {
+
+  // 🔥 Auto-detect backend base URL (local vs Render)
+  const API_BASE = window.location.origin.includes("localhost")
+    ? "http://localhost:5000"
+    : "https://bus-booking-cnxe.onrender.com";
+
+  document.getElementById('signup-form').addEventListener('submit', async function(e) {
     e.preventDefault();
     
+    const firstName = document.getElementById('first-name').value.trim();
+    const lastName = document.getElementById('last-name').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const phone = document.getElementById('phone').value.trim();
     const password = document.getElementById('password').value;
     const confirmPassword = document.getElementById('confirm-password').value;
-    
+    const termsChecked = document.getElementById('terms').checked;
+
+    if (!termsChecked) {
+      alert("You must agree to the Terms & Conditions.");
+      return;
+    }
+
     if (password !== confirmPassword) {
       alert('Passwords do not match!');
       return;
     }
-    
-    alert('Account created successfully! Please sign in to continue.');
-    window.location.href = 'signin.html';
+
+    const name = `${firstName} ${lastName}`.trim();
+
+    try {
+      const response = await fetch(`${API_BASE}/api/signup`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name,
+          email,
+          password,
+          phone
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        alert("Account created successfully! Please sign in to continue.");
+        window.location.href = "signin.html";
+      } else {
+        alert(data.error || "Signup failed. Please try again.");
+      }
+    } catch (error) {
+      console.error("Signup error:", error);
+      alert("Network error. Please try again.");
+    }
   });
 </script>
 
