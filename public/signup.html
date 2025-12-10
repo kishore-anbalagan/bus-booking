@@ -71,6 +71,7 @@
     nav {
       display: flex;
       gap: 15px;
+      align-items: center;
     }
     
     nav a {
@@ -259,8 +260,9 @@
       background: #f1f1f1;
       color: #333;
       border: none;
-      cursor: pointer;
+      cursor: button;
       transition: all 0.3s;
+      text-decoration: none;
     }
     
     .social-btn:hover {
@@ -350,8 +352,7 @@
   <nav>
     <a href="index.html"><i class="fas fa-home"></i> Home</a>
     <a href="signin.html"><i class="fas fa-sign-in-alt"></i> Sign In</a>
-    
-    <a href="#contact.html"><i class="fas fa-phone"></i> Contact</a>
+    <a href="contact.html"><i class="fas fa-phone"></i> Contact</a>
   </nav>
 </header>
 
@@ -398,11 +399,6 @@
           <label for="password">Password</label>
           <input type="password" id="password" required>
         </div>
-<!--         
-        <div class="form-group">
-          <label for="confirm-password">Confirm Password</label>
-          <input type="password" id="confirm-password" required>
-        </div> -->
         
         <div class="checkbox-group">
           <input type="checkbox" id="terms" required>
@@ -424,7 +420,6 @@
             <i class="fab fa-google"></i>
           </a>
         </div>
-        
       </div>
       
       <div class="login-link">
@@ -444,18 +439,35 @@
     easing: 'ease-in-out',
     once: true
   });
+
+  // 🔥 Auto-detect backend (local vs Render)
+  const API_BASE = window.location.origin.includes("localhost")
+    ? "http://localhost:5000"
+    : "https://bus-booking-cnxe.onrender.com";
   
   document.getElementById('signup-form').addEventListener('submit', async function (e) {
     e.preventDefault();
-    const firstName = document.getElementById('first-name').value;
-    const lastName = document.getElementById('last-name').value;
-    const name = `${firstName} ${lastName}`; // Combine first and last name
-    const email = document.getElementById('email').value;
+    
+    const firstName = document.getElementById('first-name').value.trim();
+    const lastName = document.getElementById('last-name').value.trim();
+    const name = `${firstName} ${lastName}`.trim();
+    const email = document.getElementById('email').value.trim();
     const password = document.getElementById('password').value;
-    const phone = document.getElementById('phone').value;
+    const phone = document.getElementById('phone').value.trim();
+    const termsChecked = document.getElementById('terms').checked;
+
+    if (!termsChecked) {
+      alert("You must agree to the Terms & Conditions.");
+      return;
+    }
+
+    if (!name || !email || !password || !phone) {
+      alert("Please fill in all fields.");
+      return;
+    }
 
     try {
-      const response = await fetch('http://localhost:5000/api/signup', {
+      const response = await fetch(`${API_BASE}/api/signup`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, email, password, phone }),
@@ -463,14 +475,14 @@
 
       const data = await response.json();
       if (response.ok) {
-        alert(data.message);
+        alert(data.message || 'Account created successfully! Please sign in.');
         window.location.href = 'signin.html';
       } else {
         alert(data.error || 'Sign-up failed');
       }
     } catch (error) {
       console.error('Error:', error);
-      alert('An error occurred while signing up.');
+      alert('An error occurred while signing up. Please try again.');
     }
   });
 </script>
