@@ -992,7 +992,7 @@
     if (token) {
       const userEmail = getUserEmailFromToken(token);
       authSection.innerHTML = `
-        <span class="user-info">👋 ${userEmail || 'User'}</span>
+        <span class="user-info"> ${userEmail || 'User'}</span>
         <button class="logout-btn" onclick="logout()">Logout</button>
       `;
     } else {
